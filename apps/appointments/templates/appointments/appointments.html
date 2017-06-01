@@ -12,7 +12,14 @@
         </header>
 
         <h1>Hello {{ user.name}}!!</h1>
-        {{request.session.user_id}}
+        <!-- {{request.session.user_id}} <br>
+        {% for event in events %}
+            {{event.task}}
+            {{event.date}}
+            {{event.time}}
+            {{event.status}} <br>
+        {% endfor%} -->
+
         {% if messages %}
             <ul class="flash_messages">
                     {% for message in messages %}
@@ -29,18 +36,18 @@
                 <th>Status</th>
                 <th>Action</th>
             </thead>
+
             {% for appointment in today_schedule%}
                 <tr>
-                    #populate with link to the name of the task
-                    <td>{{appointment.name}}</td>
+                    <td>{{appointment.task}}</td>
                     <td>{{appointment.time}}</td>
                     <td>{{appointment.status}}</td>
                     {% if appointment.status == 'done'%}
                     <td></td>
                     {% else %}
                     <td>
-                        <a href="{% url 'schedule:show' id=event_id %}">Edit</a>
-                        <a href="{% url 'schedule:delete' id=event_id %}">Delete</a>
+                        <a href="{% url 'schedule:show' id=appointment.id %}">Edit</a>
+                        <a href="{% url 'schedule:delete' id=appointment.id %}">Delete</a>
                     </td>
                     {% endif%}
                 </tr>
@@ -55,18 +62,18 @@
             </thead>
             {% for appointment in future_schedule %}
             <tr>
-                <td>{{appointment.name}}</td>
-                <td>{{appointments.date}}</td>
-                <td>{{appointments.time}}</td>
+                <td>{{appointment.task}}</td>
+                <td>{{appointment.date}}</td>
+                <td>{{appointment.time}}</td>
             </tr>
             {% endfor %}
         </table>
         <h4>Add an Appointment!</h4>
         <form action="{% url 'schedule:add_new' %}" method="post">
                 {%csrf_token%}
-                <label>Date: <input type="date" name=""></label>
-                <label>Time: <input type="time" name="time"></label>
-                <label>Task: <input type="text" name="name"></label>
+                <label>Date: <input type="date" name="date"></label><br>
+                <label>Time: <input type="time" name="time"></label><br>
+                <label>Task: <input type="text" name="task"></label><br>
                 <input type="submit" name="submit" value="Add">
         </form>
 
