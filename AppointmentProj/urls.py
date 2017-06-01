@@ -17,6 +17,6 @@ from django.conf.urls import url, include
 # from django.contrib import admin
 
 urlpatterns = [
-    url(r'^/', include('apps.log_reg.urls', namespace='login')),
+    url(r'^', include('apps.log_reg.urls', namespace='login')),
     url(r'^appointments/', include('apps.appointments.urls', namespace='schedule')),
 ]
