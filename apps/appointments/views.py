@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from ..log_reg.models import User
+from datetime import datetime
 # Create your views here.
 
 
@@ -10,11 +12,12 @@ def appointments(request):
     else:
         user_id = request.session['user_id']
         context = {
+            "time": datetime.now().strftime('%B %d, %Y'),
             "user": User.objects.get(id=user_id),
             "users": User.objects.exclude(id=user_id)
-            # created context for appointments for today
-            # create context for appointments in the future
         }
+        # created context for appointments for today_schedule << used in html
+        # create context for appointments in the future_schedule <<used in html
     return render(request, 'appointments/appointments.html', context)
 
 
