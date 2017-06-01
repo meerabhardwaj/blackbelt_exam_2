@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from .models import Event
 from ..log_reg.models import User
@@ -24,8 +24,13 @@ def appointments(request):
 
 
 def show(request, id):
-    event_id = Event.objects.filter(id=1)
-    return render(request, 'appointments/show.html', id=event_id)
+    if not 'user_id' in request.session:
+        messages.add_message(request, messages.ERROR, "Please login.")
+        return redirect('login:main')
+    context = {
+        'events': Event.objects.filter(id=id)
+    }
+    return render(request, 'appointments/show.html', context)
 
 
 def add_new(request):
@@ -39,8 +44,18 @@ def add_new(request):
 
 
 def delete(request, id):
-    pass
+    result = Event.objects.deleteProduct(id=appointment.id)
+    if not result['status']:
+        for error in result['errors']:
+            messages.add_message(request, messages.ERROR, error)
+    else:
+        messages.add_message(request, messages.SUCCESS, "Say goodbye to that task!")
+    return redirect('schedule:appointments')
 
 
 def update(request, id):
     pass
+
+
+def catcher(request):
+    return redirect(reverse("schedule:appointments"))

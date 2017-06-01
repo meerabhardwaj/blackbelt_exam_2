@@ -33,7 +33,16 @@ class EventManager(models.Manager):
             }
 
     def delete_event(self, id, user_id):
-        pass
+        errors = []
+        response = {}
+        event = Event.objects.filter(id=id)
+        if event:
+            event[0].delete()
+            response['status'] = True
+        else:
+            errors.append("product wasn't found")
+            response['status'] = False
+        return response
 
     def update_event(self, id, user_id):
         pass

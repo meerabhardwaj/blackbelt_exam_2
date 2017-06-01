@@ -18,18 +18,36 @@
                     {% endfor %}
             </ul>
         {% endif %}
-        <form action="{% url 'schedule:update' id=event_id %}" method="post">
-            <p>Tasks:</p><input type="text" name="task" value="PULL FROM APPOINTMENT BASED ON APP_ID">
+
+        {% for appointment in events%}
+        <form action="{% url 'schedule:update' id=appointment.id %}" method="post">
+            % csrf_token %}
+            <p>Tasks:</p><input type="text" name="task" value="{{appointment.task}}">
             <p>Status:</p>
-            <!-- can make default by setting selected attribute to select use {% if appointment.status == pending%} elif appointment.status ==done , else and have three options!-->
+            <!-- can make default by setting selected attribute to select use  if appointment.status == pending elif appointment.status ==done , else and have three options!-->
+            {% if appointment == "pending"%}
             <select name="status">
-                <option value="pending">Pending</option>
+                <option value="pending" selected>Pending</option>
                 <option value="done">Done</option>
                 <option value="missed">Missed</option>
             </select>
-            <p>Date:</p><input type="date" name="date" value="PULL FROM DB BASED ON APP ID">
-            <p>Time:</p><input type="time" name="time" value="PULL FROM DB BASED ON APP ID">
+            {% elif appointment == "done" %}
+            <select name="status">
+                <option value="pending">Pending</option>
+                <option value="done" selected>Done</option>
+                <option value="missed">Missed</option>
+            </select>
+            {% else %}
+            <select name="status">
+                <option value="pending">Pending</option>
+                <option value="done">Done</option>
+                <option value="missed" selected>Missed</option>
+            </select>
+            {% endif %}
+            <p>Date:</p><input type="date" name="date" value="{{appointment.date}}">
+            <p>Time:</p><input type="time" name="time" value="{{appointment.time}}">
             <input type="submit" name="update" value="Update">
         </form>
+        {% endfor %}
     </body>
 </html>
